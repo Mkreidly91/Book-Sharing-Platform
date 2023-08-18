@@ -4,11 +4,10 @@ import bodyParser from 'body-parser';
 // import cookieParser from 'cookie-parser';
 // import compression from 'compression';
 import cors from 'cors';
-import mongoose from 'mongoose';
+import mongodbConnection from './configs/mongodb.connection';
 import { config } from 'dotenv';
-
-// import router from './Routes/index';
-// config();
+config();
+import router from './routes';
 
 const app = express();
 
@@ -20,14 +19,12 @@ app.use(
 
 app.use(bodyParser.json());
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
 
-// app.use('/', router());
+app.use('/', router());
 
-mongoose.Promise = Promise;
-mongoose.connect(process.env.MONGO_URL);
-mongoose.connection.on('error', (error: Error) => console.log(error));
+mongodbConnection();
 
-server.listen(8080, () => {
+app.listen(8080, () => {
   console.log('Server running on http://localhost:8080/');
 });
