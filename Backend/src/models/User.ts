@@ -1,15 +1,19 @@
 import mongoose from 'mongoose';
+import { bookSchema } from './Book';
 
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: {
     type: String,
-    required: [true, 'Email field is required'],
-    unique: [true, 'Email is already taken'],
+    index: true,
+    lowercase: true,
+    required: true,
+    unique: true,
     match: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/,
   },
-  password: { type: String, required: true, select: false },
+  password: { type: String, required: true, minlength: 6 },
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  liked: [bookSchema],
 });
 
 const UserModel = mongoose.model('User', UserSchema);
