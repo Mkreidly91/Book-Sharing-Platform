@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
     match: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/,
   },
   password: { type: String, required: true, select: false },
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 });
 
 const UserModel = mongoose.model('User', UserSchema);
