@@ -1,4 +1,3 @@
-// hello
-import { register } from './user.controller';
+import { register, login } from './auth.controller';
 
-export { register };
+export { register, login };
