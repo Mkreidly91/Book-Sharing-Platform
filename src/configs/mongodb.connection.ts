@@ -4,9 +4,9 @@ config();
 
 const { MONGO_URL } = process.env;
 
-export default () => {
+export default async () => {
   mongoose.Promise = Promise;
-  mongoose.connect(MONGO_URL);
+  await mongoose.connect(MONGO_URL);
   console.log('mongo connected');
   mongoose.connection.on('error', (error: Error) => console.log(error));
 };
