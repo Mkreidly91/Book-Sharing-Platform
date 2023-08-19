@@ -9,6 +9,7 @@ const bookSchema = new mongoose.Schema({
   review: { type: String },
 
   likes: { type: Number, default: 0 },
+
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -18,4 +19,4 @@ const bookSchema = new mongoose.Schema({
 
 const Book = mongoose.model('Book', bookSchema);
 
-export default Book;
+export { Book, bookSchema };

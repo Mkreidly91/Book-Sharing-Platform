@@ -1,13 +1,13 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import express from 'express';
-// type user = {
-//   id: number;
-//   name: string;
-//   surname: string;
-//   authenticationToken?: string | null;
-// };
+
+export interface UserPayload extends JwtPayload {
+  name: string;
+  email: string;
+  id: string;
+}
 export interface AuthRequest extends express.Request {
-  user: string | JwtPayload;
+  user: UserPayload;
 }
 const authMiddleware = (
   req: AuthRequest,
@@ -17,13 +17,12 @@ const authMiddleware = (
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).send({ message: 'Unauthorized' });
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET) as UserPayload;
     req.user = decoded;
     next();
   } catch (error) {
-    console.log(error);
     res.status(401).send({ message: 'Unauthorized' });
   }
 };
 
-module.exports = authMiddleware;
+export default authMiddleware;
