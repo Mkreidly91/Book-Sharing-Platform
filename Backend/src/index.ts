@@ -1,8 +1,5 @@
 import express from 'express';
-import http from 'http';
 import bodyParser from 'body-parser';
-// import cookieParser from 'cookie-parser';
-// import compression from 'compression';
 import cors from 'cors';
 import mongodbConnection from './configs/mongodb.connection';
 import { config } from 'dotenv';
@@ -18,8 +15,6 @@ app.use(
 );
 
 app.use(bodyParser.json());
-
-// const server = http.createServer(app);
 
 app.use('/', router());
 

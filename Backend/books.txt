@@ -1,0 +1,57 @@
+{
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "picture": "https://picsum.photos/200/300",
+  "genres": ["Fiction", "Classic", "Drama"],
+  "review": "A beautifully written novel about the decadence of the Jazz Age.",
+}
+
+{
+  "title": "To Kill a Mockingbird",
+  "author": "Harper Lee",
+  "picture": "https://picsum.photos/200/300",
+  "genres": ["Fiction", "Classic", "Drama"],
+  "review": "A powerful exploration of racial injustice and moral growth.",
+}
+
+{
+  "title": "Harry Potter and the Sorcerer's Stone",
+  "author": "J.K. Rowling",
+  "picture": "https://picsum.photos/200/300",
+  "genres": ["Fantasy", "Adventure", "Young Adult"],
+  "review": "An enchanting introduction to the magical world of Hogwarts.",
+}
+
+{
+  "title": "1984",
+  "author": "George Orwell",
+  "picture": "https://picsum.photos/200/300",
+  "genres": ["Dystopian", "Science Fiction", "Classic"],
+  "review": "A chilling portrayal of a totalitarian society and the power of language.",
+}
+
+
+{
+  "title": "Pride and Prejudice",
+  "author": "Jane Austen",
+  "picture": "https://picsum.photos/200/300",
+  "genres": ["Romance", "Classic"],
+  "review": "A timeless story of love, manners, and social expectations."
+}
+
+{
+  "title": "The Hobbit",
+  "author": "J.R.R. Tolkien",
+  "picture": "https://picsum.photos/200/300",
+  "genres": ["Fantasy", "Adventure"],
+  "review": "A captivating tale of a hobbit's unexpected journey and bravery."
+}
+
+
+{
+  "title": "The Lord of the Rings: The Fellowship of the Ring",
+  "author": "J.R.R. Tolkien",
+  "picture": "https://picsum.photos/200/300",
+  "genres": ["Fantasy", "Adventure"],
+  "review": "The beginning of an epic journey filled with magic, friendship, and heroism."
+}
