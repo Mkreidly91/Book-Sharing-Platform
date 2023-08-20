@@ -2,8 +2,7 @@ import axios from 'axios';
 const baseUrl = 'http://localhost:8080/';
 
 const auth = () => {
-  const { token } = JSON.parse(localStorage.getItem('user'));
-
+  const { token } = JSON.parse(localStorage.getItem('userInfo'));
   return {
     headers: { Authorization: `Bearer ${token}` },
   };
