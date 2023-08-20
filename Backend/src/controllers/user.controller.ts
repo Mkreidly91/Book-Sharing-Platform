@@ -4,6 +4,7 @@ import UserModel from '../models/User';
 import { AuthRequest } from '../middlewares/auth.middleware';
 import { Book } from '../models/Book';
 import mongoose from 'mongoose';
+import path from 'path';
 
 const followUser = async (req: AuthRequest, res: express.Response) => {
   try {
@@ -88,14 +89,28 @@ const postBook = async (req: AuthRequest, res: express.Response) => {
     }
 
     const { user } = req;
+    // let image = ''; // Initialize an empty picture URL
 
+    // if (req.files && req.files[0]) {
+    //   const pictureFile = req.files[0];
+    //   const picturePath = path.join(
+    //     __dirname,
+    //     '..',
+    //     'uploads',
+    //     pictureFile.name
+    //   );
+
+    //   await pictureFile.mv(picturePath);
+
+    //   image = `/uploads/${pictureFile.name}`;
+    // }
     const newBook = new Book({
       title,
       author,
       picture,
       genres,
       review,
-      createdBy: new mongoose.Types.ObjectId(user.id),
+      createdBy: new mongoose.Types.ObjectId(user._id),
     });
 
     newBook.save();
@@ -117,4 +132,33 @@ const postBook = async (req: AuthRequest, res: express.Response) => {
     console.log(error);
   }
 };
-export { followUser, postBook, likeBook };
+
+const getAllFollowed = async (req: AuthRequest, res: express.Response) => {
+  try {
+    const user = req.user;
+    const currentUser = await UserModel.findById(user._id);
+    const response: any = [];
+
+    const { following } = currentUser;
+
+    for (const personId of following) {
+      const books = await Book.find({ createdBy: personId });
+      const person = await UserModel.findById(personId);
+
+      books.forEach((book) => {
+        const isLiked = currentUser.likes.find(
+          (e) => e.toString() === book._id.toString()
+        );
+        response.push({
+          book,
+          person,
+          isfollowing: true,
+          isLiked: isLiked ? true : false,
+        });
+      });
+    }
+
+    return res.status(200).send(response);
+  } catch (error) {}
+};
+export { followUser, postBook, likeBook, getAllFollowed };

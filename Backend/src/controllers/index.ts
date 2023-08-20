@@ -1,5 +1,10 @@
 import { register, login } from './auth.controller';
-import { followUser, postBook, likeBook } from './user.controller';
+import {
+  followUser,
+  postBook,
+  likeBook,
+  getAllFollowed,
+} from './user.controller';
 import { search, discoverBooks } from './book.controller';
 
 export {
@@ -10,4 +15,5 @@ export {
   likeBook,
   search,
   discoverBooks,
+  getAllFollowed,
 };
