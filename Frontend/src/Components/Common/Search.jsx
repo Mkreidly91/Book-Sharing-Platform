@@ -1,12 +1,26 @@
 import React, { useRef, useState } from 'react';
 import CustomInput from '../Inputs/CustomInput';
-import { search, getMessagesById } from '../../helpers/common.helpers';
+import mag from '../../assets/icons/magnifier.svg';
+import genre from '../../assets/icons/genre.svg';
+import genreWhite from '../../assets/icons/genre-white.svg';
+import author from '../../assets/icons/author.svg';
+import authorWhite from '../../assets/icons/author-white.svg';
 
+// import { search, getMessagesById } from '../../helpers/common.helpers';
+const falseState = {
+  genre: false,
+  author: false,
+};
 const Search = ({ setMessages, setUser, userType }) => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState();
+  // const [results, setResults] = useState();
   const timeout = useRef();
 
+  const [clicked, setClicked] = useState(falseState);
+
+  const toggleState = (button) => {
+    setClicked({ ...falseState, [button]: !clicked[button] });
+  };
   const changeHandler = (e) => {
     const { value } = e.target;
     setQuery(value);
@@ -20,30 +34,35 @@ const Search = ({ setMessages, setUser, userType }) => {
     }
 
     timeout.current = setTimeout(async () => {
-      const users = await search({
-        userType: userType,
-        search: query.trim().toLowerCase(),
-      });
+      // const users = await search({
+      //   userType: userType,
+      //   search: query.trim().toLowerCase(),
+      // });
       setResults(users);
     }, 600);
   }
 
   return (
-    <div className="w-[250px] h-fit bg-cyan-light rounded-2xl p-5 flex flex-col gap-5  ">
-      <div className="input-container flex flex-col  justify-center gap-5 ">
+    <div className="w-[600px]  h-fit  rounded-2xl flex flex-col  gap-5 ">
+      <div className="input-container relative flex flex-col  justify-center gap-5 ">
         <CustomInput
-          label="search"
           type="search"
-          className=" bg-white rounded w-[200px] shadow appearance-none border  py-2 px-3  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="bg-slate-100 pl-[100px] "
           value={query}
           onChange={(e) => {
             changeHandler(e);
-            handleDebounceSearch(search);
+            // handleDebounceSearch(search);
           }}
+          placeholder="Search book titles, authors, publishers..."
+        />
+        <img
+          src={mag}
+          className="absolute top-[50%] translate-x-[30px] translate-y-[-30%] "
+          alt=""
         />
       </div>
 
-      <div className="results flex flex-col gap-5 max-h-[200px] overflow-auto">
+      {/* <div className="results flex flex-col gap-5 max-h-[200px] overflow-auto">
         {query &&
           results &&
           results.data.users.map((user, index) => (
@@ -59,6 +78,30 @@ const Search = ({ setMessages, setUser, userType }) => {
               {user.name}
             </span>
           ))}
+      </div> */}
+      <div className="button-container flex justify-center gap-20 relative">
+        <div
+          className={`flex gap-3 p-1 px-3 rounded-md  cursor-pointer ${
+            clicked.genre ? 'b-orange text-white' : 'bg-slate-100 text-black'
+          }`}
+          onClick={() => {
+            toggleState('genre');
+          }}
+        >
+          <img src={clicked.genre ? genreWhite : genre} alt="" />
+          <span className=""> Genre</span>
+        </div>
+        <div
+          className={`flex gap-3  p-1 px-3 rounded-md cursor-pointer ${
+            clicked.author ? 'b-orange text-white' : 'bg-slate-100 text-black'
+          }`}
+          onClick={() => {
+            toggleState('author');
+          }}
+        >
+          <img src={clicked.author ? authorWhite : author} alt="" />
+          <span className=""> Author</span>
+        </div>
       </div>
     </div>
   );
