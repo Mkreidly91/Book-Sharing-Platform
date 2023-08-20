@@ -1,9 +1,9 @@
 import React from 'react';
 import booklogo from '../../assets/icons/books-logo.svg';
 
-const Logo = ({ logoSize = 40, fontSize = 16, gap = 2 }) => {
+const Logo = ({ className, logoSize = 40, fontSize = 16, gap = 2 }) => {
   return (
-    <div className={`flex gap-${gap} items-center`}>
+    <div className={`flex gap-${gap} items-center ${className}`}>
       <img
         className={`w-[${logoSize}px] h-[${logoSize}px]`}
         src={booklogo}
