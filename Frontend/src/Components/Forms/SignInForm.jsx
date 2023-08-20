@@ -55,7 +55,7 @@ const SignInForm = ({ setShow, className }) => {
           type="text"
           onChange={onChange}
           value={email}
-          className={'w-[300px]'}
+          className={'w-[300px] text-black'}
           labelStyle={{ color: 'white' }}
           placeholder="Email"
         />
@@ -65,7 +65,7 @@ const SignInForm = ({ setShow, className }) => {
           type="password"
           onChange={onChange}
           value={password}
-          className={'w-[300px]  '}
+          className={'w-[300px]  text-black '}
           placeholder="Password"
         />
       </div>

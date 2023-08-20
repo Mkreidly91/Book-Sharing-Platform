@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const SignIn = () => {
   return (
-    <div className="flex h-[100vh]">
+    <div className="flex h-[100vh] bg-slate-50">
       <div className="grow from-container flex flex-col items-center justify-between ">
         <div className="header  w-full flex items-center justify-between py-10 px-10">
           <Logo />
