@@ -9,8 +9,8 @@ const DashBoardButton = ({
 }) => {
   return (
     <div
-      className={`icon-container cursor-pointer hover:border  hover:border-solid hover:border-blue-700  ${className} ${
-        selected && 'border border-solid border-blue-700'
+      className={`icon-container cursor-pointer hover:outline  hover:outline-solid hover:outline-blue-700  ${className} ${
+        selected && 'outline outline-solid outline-blue-700'
       }`}
       onClick={onClick}
     >

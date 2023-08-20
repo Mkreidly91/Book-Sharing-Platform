@@ -29,15 +29,7 @@ const SignInForm = ({ setShow, className }) => {
     if (data) {
       setErrors('');
       localStorage.setItem('userInfo', JSON.stringify(data));
-      // if(data.user_type=="1"){
-      //   navigate('/adminDash');
-      // } else if(data.user_type=="2"){
-      //   navigate('/teacherDash');
-      // } else if(data.user_type=="3"){
-      //   navigate('/parentDash');
-      // } else {
-      //   navigate('/studentDash');
-      // }
+      navigate('/dash');
     }
   }
 
