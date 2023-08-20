@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Route, Router, Routes } from 'react-router-dom';
 import './App.css';
-import SignInForm from './Components/Forms/SignInForm';
-import SignUpForm from './Components/Forms/SignUpForm';
 import SignIn from './Pages/SignIn';
+import SignUp from './Pages/SignUp';
+
 function App() {
   const [count, setCount] = useState(0);
 
@@ -11,10 +11,7 @@ function App() {
     <div className="app h-full">
       <Routes>
         <Route path="/" element={<SignIn />} />
-        <Route
-          path="/signUp"
-          element={<SignUpForm className={'bg-red-200'} />}
-        />
+        <Route path="/signUp" element={<SignUp />} />
       </Routes>
     </div>
   );

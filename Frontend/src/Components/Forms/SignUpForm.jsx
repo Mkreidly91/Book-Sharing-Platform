@@ -11,7 +11,7 @@ const initialState = {
   password: '',
 };
 
-const SignUpForm = () => {
+const SignUpForm = ({ className }) => {
   const [inputState, setInputState] = useState(initialState);
   const [errors, setErrors] = useState('');
   const navigate = useNavigate();
@@ -31,13 +31,16 @@ const SignUpForm = () => {
     navigate('/');
   }
 
-  const { name, username, email, password } = inputState;
+  const { name, email, password } = inputState;
   return (
-    <div className="page-wrapper h-full flex flex-col justify-center items-center">
-      <div className="signUp-container flex flex-col items-center gap-5 insta-border  h-fit p-10">
-        <div className="logo-container flex place-content-center">
-          {/* <img className="w-[175px]" src={instaLogo} alt="" /> */}
-        </div>
+    <div className={` w-fit flex flex-col items-center   ${className}`}>
+      <div className="form-header  flex flex-col gap-3 w-fit text-center   rounded-t-2xl  ">
+        <span className="font-semibold text-4xl">
+          Get Started With BookSpace
+        </span>
+        <span className="font-normal">Discover books, connect with people</span>
+      </div>
+      <div className="signUp-container flex flex-col items-center gap-3 insta-border  h-fit p-10">
         <div className="form-container flex flex-col gap-5">
           <CustomInput
             label="Full Name"
@@ -45,7 +48,8 @@ const SignUpForm = () => {
             type="text"
             onChange={onChange}
             value={name}
-            className={'w-[300px]'}
+            className={'w-[300px] text-black'}
+            placeholder="Full Name"
           />
 
           <CustomInput
@@ -54,7 +58,8 @@ const SignUpForm = () => {
             type="email"
             onChange={onChange}
             value={email}
-            className={'w-[300px]'}
+            className={'w-[300px] text-black'}
+            placeholder="Email"
           />
           <CustomInput
             label="password"
@@ -62,22 +67,18 @@ const SignUpForm = () => {
             type="password"
             onChange={onChange}
             value={password}
-            className={'w-[300px]'}
+            className={'w-[300px] text-black'}
+            placeholder="Password"
           />
         </div>
+        <div className="error font-light text-red-700 text-xs min-h-[14px] mt-2">
+          {errors}
+        </div>
         <Button
-          text="SignUp"
+          text="Create Account"
           onClick={() => handlesignUp()}
-          className="sign-in bg-insta-blue mt-5 p-2 rounded text-center w-full"
+          className="sign-in  py-2   text-center text-normal text-white font-light rounded-md  b-orange  cursor-pointer w-[300px] "
         />
-
-        <div className="error font-normal text-red-700 text-sm">{errors}</div>
-      </div>
-      <div className="sign-up mt-10 insta-border p-10 w-[382px] text-center">
-        Already have an account?
-        <Link to="/">
-          <span className="color-insta-blue cursor-pointer">Sign In</span>
-        </Link>
       </div>
     </div>
   );
