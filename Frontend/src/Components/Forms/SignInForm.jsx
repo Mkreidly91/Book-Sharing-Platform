@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Modal from '../Common/Modal';
 import CustomInput from '../Inputs/CustomInput';
 import { logIn } from '../../helpers/auth.helpers';
 import { Link, useNavigate } from 'react-router-dom';
+import Button from '../Common/Button';
 
 const initialState = {
   email: '',
@@ -43,12 +43,10 @@ const SignInForm = ({ setShow, className }) => {
 
   const { email, password } = inputState;
   return (
-    <Modal
-      // setShow={setShow}
-      className={` bg-white dark:text-slate-200 signIn-container text-white  text-lg   flex flex-col items-center gap-5 insta-border rounded-2xl ${className} `}
-    >
-      <div className="form-header gothic flex p-6 w-full rounded-t-2xl bg-cyan-dark ">
-        Sign In
+    <div className={` w-fit flex flex-col items-center  ${className}`}>
+      <div className="form-header  flex flex-col gap-3 w-fit text-center  p-6 rounded-t-2xl bg-cyan-dark ">
+        <span className="font-semibold text-4xl">Welcome Back</span>
+        <span className="font-normal">Log into your account</span>
       </div>
       <div className="form-container flex flex-col gap-5 p-6 pb-0 ">
         <CustomInput
@@ -59,6 +57,7 @@ const SignInForm = ({ setShow, className }) => {
           value={email}
           className={'w-[300px]'}
           labelStyle={{ color: 'white' }}
+          placeholder="Email"
         />
         <CustomInput
           label="password"
@@ -67,29 +66,19 @@ const SignInForm = ({ setShow, className }) => {
           onChange={onChange}
           value={password}
           className={'w-[300px]  '}
+          placeholder="Password"
         />
       </div>
-      <div className="error font-normal text-red-700 text-sm">{errors}</div>
-      <div className=" monster flex  gap-3 w-full px-5 pb-5">
-        <div
-          onClick={() => handleSignIn()}
-          className="sign-in bg-insta-blue p-2 rounded text-center text-white  bg-cyan-dark  w-full cursor-pointer"
-        >
-          Sign In
-        </div>
-        <div
-          onClick={() => setShow(false)}
-          className=" sign-in color-cyan-medium p-2 rounded text-center w-full cursor-pointer"
-        >
-          Cancel
-        </div>
+      <div className="error font-light text-red-700 text-xs min-h-[14px] mt-2">
+        {errors}
       </div>
-      <Link to="/signUp" className="flex justify-end cursor-pointer">
-        <div className="small-text text-xs text-white justify-self-end">
-          New here? sign up now!
-        </div>
-      </Link>
-    </Modal>
+
+      <Button
+        text="Log In"
+        onClick={() => handleSignIn()}
+        className="sign-in  py-2 mt-5   text-center text-normal text-black font-light rounded-md border border-solid border-black cursor-pointer w-[300px] "
+      />
+    </div>
   );
 };
 
