@@ -6,16 +6,23 @@ import Logo from '../../Components/Common/logo';
 import dashImg from '../../assets/icons/DashBoard/ic_round-dashboard.svg';
 import heartGrey from '../../assets/icons/DashBoard/heart-grey.svg';
 import people from '../../assets/icons/DashBoard/people.svg';
-import post from '../../assets/icons/DashBoard/post.svg';
+import postImg from '../../assets/icons/DashBoard/post.svg';
 import logout from '../../assets/icons/DashBoard/logout.svg';
 
 import './Dashboard.css';
 import Card from '../../Components/Posts/Card';
 import Search from '../../Components/Common/Search';
-import { getAllFollowed } from '../../helpers/user.helpers';
+import {
+  getAllFollowed,
+  search,
+  getAllLiked,
+  follow,
+} from '../../helpers/user.helpers';
+import AddPost from '../../Components/Forms/AddPost';
 
 const falseState = {
-  feed: false,
+  search: false,
+  followed: false,
   liked: false,
   all: false,
   post: false,
@@ -23,21 +30,24 @@ const falseState = {
 
 const Dashboard = () => {
   const [state, setState] = useState({
-    feed: false,
+    followed: false,
     liked: false,
-    all: false,
+    all: true,
     post: false,
   });
 
-  const [following, setFollowing] = useState();
-  console.log(following);
+  const [cards, setCards] = useState();
+  const [show, setShow] = useState(false);
+
+  const { followed, liked, all, post } = state;
   useEffect(() => {
-    const getFollowing = async () => {
-      const res = await getAllFollowed();
-      setFollowing(res);
+    const getAll = async () => {
+      const res = await search({});
+      setCards(res);
     };
-    getFollowing();
+    getAll();
   }, []);
+
   const togglePage = (page) => {
     setState({ ...falseState, [page]: true });
   };
@@ -45,60 +55,113 @@ const Dashboard = () => {
   return (
     <div className="dashboard-wrapper h-full p-5">
       <div className=" flex justify-center items-center relative h-fit z-0">
-        <Logo className="absolute left-0" />
-        {/* <Logo /> */}
-        <Search />
+        <Logo className="absolute left-0 top-5 transform " />
+        <Search togglePage={togglePage} setCards={setCards} />
       </div>
 
       <div className="flex ">
-        <SideBar className=" flex flex-col gap-10 min-w-[50px] justify-between w-fit">
+        <SideBar className="fixed flex items-center  flex-col  gap-32 min-w-[50px]  w-fit">
           <DashBoardButton
-            onClick={() => {
-              togglePage('');
+            onClick={async () => {
+              togglePage('all');
+              const res = await search({});
+              setCards(res);
             }}
-            iconStyles={'w-[30px]'}
+            iconStyles={'w-[28px] '}
             icon={dashImg}
+            selected={all}
           />
-          <div className="flex flex-col gap-20">
+          <div className="flex flex-col gap-10">
             <DashBoardButton
-              onClick={() => {
-                togglePage('');
+              onClick={async () => {
+                togglePage('liked');
+                const res = await getAllLiked();
+                setCards(res);
               }}
-              iconStyles={'w-[30px]'}
+              iconStyles={'w-[28px] '}
               icon={heartGrey}
+              selected={liked}
             />
             <DashBoardButton
-              onClick={() => {
-                togglePage('');
+              onClick={async () => {
+                togglePage('followed');
+                const res = await getAllFollowed();
+                setCards(res);
               }}
-              iconStyles={'w-[30px]'}
+              iconStyles={'w-[28px] '}
               icon={people}
+              selected={followed}
             />
             <DashBoardButton
               onClick={() => {
-                togglePage('');
+                togglePage('post');
+                setShow(true);
               }}
-              iconStyles={'w-[30px]'}
-              icon={post}
+              iconStyles={'w-[28px] '}
+              icon={postImg}
             />
           </div>
           <DashBoardButton
             onClick={() => {
               togglePage('');
             }}
-            iconStyles={'w-[30px]'}
+            iconStyles={'w-[28px] '}
             icon={logout}
           />
         </SideBar>
-        <div className="cards grow flex  gap-6 flex-wrap justify-center ">
-          {following && following.map((post) => <Card post={post} />)}
-          {/* <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card /> */}
+
+        <div className="cards flex flex-wrap gap-5 justify-center  gap-y-[50px] mx-auto ">
+          {cards &&
+            state.followed &&
+            cards.map((post) => (
+              <Card
+                key={post.book._id}
+                post={post}
+                setCardState={setCards}
+                page={state}
+              />
+            ))}
+
+          {cards &&
+            state.all &&
+            cards.map((post) => (
+              <Card
+                key={post.book._id}
+                post={post}
+                setCardState={setCards}
+                page={state}
+              />
+            ))}
+
+          {cards &&
+            state.liked &&
+            cards.map((post) => (
+              <Card
+                key={post.book._id}
+                post={post}
+                setCardState={setCards}
+                page={state}
+              />
+            ))}
+
+          {cards &&
+            state.search &&
+            cards.map((post) => (
+              <Card
+                key={post.book._id}
+                post={post}
+                setCardState={setCards}
+                page={state}
+              />
+            ))}
+
+          {post && show && (
+            <AddPost
+              setShow={setShow}
+              togglePage={togglePage}
+              setCardState={setCards}
+            />
+          )}
         </div>
       </div>
     </div>
