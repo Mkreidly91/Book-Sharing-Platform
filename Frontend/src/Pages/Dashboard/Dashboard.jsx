@@ -12,7 +12,7 @@ import logout from '../../assets/icons/DashBoard/logout.svg';
 import './Dashboard.css';
 import Card from '../../Components/Posts/Card';
 import Search from '../../Components/Common/Search';
-import { getAllFollowed } from '../../helpers/user.hepers';
+import { getAllFollowed } from '../../helpers/user.helpers';
 
 const falseState = {
   feed: false,
@@ -29,11 +29,12 @@ const Dashboard = () => {
     post: false,
   });
 
+  const [following, setFollowing] = useState();
+  console.log(following);
   useEffect(() => {
     const getFollowing = async () => {
       const res = await getAllFollowed();
-
-      console.log(res);
+      setFollowing(res);
     };
     getFollowing();
   }, []);
@@ -45,9 +46,11 @@ const Dashboard = () => {
     <div className="dashboard-wrapper h-full p-5">
       <div className=" flex justify-center items-center relative h-fit z-0">
         <Logo className="absolute left-0" />
+        {/* <Logo /> */}
         <Search />
       </div>
-      <div className="flex gap-20">
+
+      <div className="flex ">
         <SideBar className=" flex flex-col gap-10 min-w-[50px] justify-between w-fit">
           <DashBoardButton
             onClick={() => {
@@ -88,13 +91,14 @@ const Dashboard = () => {
           />
         </SideBar>
         <div className="cards grow flex  gap-6 flex-wrap justify-center ">
+          {following && following.map((post) => <Card post={post} />)}
+          {/* <Card />
           <Card />
           <Card />
           <Card />
           <Card />
           <Card />
-          <Card />
-          <Card />
+          <Card /> */}
         </div>
       </div>
     </div>

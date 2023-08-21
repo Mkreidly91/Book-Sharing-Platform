@@ -3,6 +3,7 @@ const baseUrl = 'http://localhost:8080/';
 
 const auth = () => {
   const { token } = JSON.parse(localStorage.getItem('userInfo'));
+  console.log(token);
   return {
     headers: { Authorization: `Bearer ${token}` },
   };
