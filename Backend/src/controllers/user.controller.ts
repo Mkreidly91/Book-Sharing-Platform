@@ -147,7 +147,7 @@ const getAllFollowed = async (req: AuthRequest, res: express.Response) => {
       );
       response.push({
         book,
-        isfollowing: true,
+        isFollowing: true,
         isLiked: isLiked ? true : false,
       });
     });

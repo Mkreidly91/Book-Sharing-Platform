@@ -18,7 +18,9 @@ const authMiddleware = (
   next: express.NextFunction
 ) => {
   const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).send({ message: 'Unauthorized' });
+
+  if (!token)
+    return res.status(401).send({ message: 'Unauthorized, no token' });
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET) as UserPayload;
     if (!decoded) return res.status(401).send({ message: 'Unauthorized' });
