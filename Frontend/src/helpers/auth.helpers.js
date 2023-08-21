@@ -3,10 +3,14 @@ const baseUrl = 'http://localhost:8080/';
 
 const auth = () => {
   const { token } = JSON.parse(localStorage.getItem('userInfo'));
-  console.log(token);
   return {
     headers: { Authorization: `Bearer ${token}` },
   };
+};
+
+const getUser = () => {
+  const { user } = JSON.parse(localStorage.getItem('userInfo'));
+  return user;
 };
 
 async function logIn({ email, password }) {
@@ -84,4 +88,4 @@ async function logOut() {
   }
 }
 
-export { logIn, auth, logOut, register };
+export { logIn, auth, logOut, register, getUser };

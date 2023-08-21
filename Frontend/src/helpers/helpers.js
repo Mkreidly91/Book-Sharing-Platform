@@ -7,7 +7,9 @@ function toBase64(file) {
   });
 }
 const replaceObjectById = (id, newObject, state) => {
-  const updatedObjects = state.map((obj) => (obj.id === id ? newObject : obj));
+  const updatedObjects = state.map((obj) =>
+    obj._id === id && obj ? newObject : obj
+  );
   return updatedObjects;
 };
 
