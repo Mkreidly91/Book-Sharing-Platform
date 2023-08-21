@@ -23,7 +23,7 @@ const followUser = async (req: AuthRequest, res: express.Response) => {
     );
 
     let status;
-    console.log(currentUser);
+
     const { following } = currentUser;
     if (isFollowing) {
       const filtered = following.filter((e) => !e.equals(targetUser._id));
@@ -34,7 +34,6 @@ const followUser = async (req: AuthRequest, res: express.Response) => {
       currentUser.following = [...following, targetUser._id];
       status = `liked ${targetUser.name}`;
     }
-    console.log(currentUser.following);
     await currentUser.save();
     return res.status(200).send({ message: status });
   } catch (error) {
@@ -45,7 +44,6 @@ const followUser = async (req: AuthRequest, res: express.Response) => {
 const likeBook = async (req: AuthRequest, res: express.Response) => {
   try {
     const targetBookId = req.params.bookId;
-    console.log(targetBookId);
     const currentUserId = req.user._id;
 
     const targetBook = await Book.findById(targetBookId);
@@ -59,7 +57,6 @@ const likeBook = async (req: AuthRequest, res: express.Response) => {
     );
 
     let status;
-    console.log(currentUser);
     const { likes } = currentUser;
     if (isLiked) {
       const filtered = likes.filter((e) => !e.equals(targetBook._id));
@@ -70,7 +67,7 @@ const likeBook = async (req: AuthRequest, res: express.Response) => {
       currentUser.likes = [...likes, targetBook._id];
       status = `liked ${targetBook.title}`;
     }
-    console.log(currentUser.likes);
+
     await currentUser.save();
     return res.status(200).send({ message: status });
   } catch (error) {
@@ -81,8 +78,6 @@ const likeBook = async (req: AuthRequest, res: express.Response) => {
 
 const postBook = async (req: AuthRequest, res: express.Response) => {
   try {
-    console.log(req);
-
     const { title, author, picture, genres, review } = req.body;
     if (!title || !author || !picture || !genres || !review) {
       return res.status(400).send({ error: 'All fields are required' });
@@ -141,24 +136,25 @@ const getAllFollowed = async (req: AuthRequest, res: express.Response) => {
 
     const { following } = currentUser;
 
-    for (const personId of following) {
-      const books = await Book.find({ createdBy: personId });
-      const person = await UserModel.findById(personId);
+    const books = await Book.find({ createdBy: { $in: following } }).populate(
+      'createdBy',
+      'name email'
+    );
 
-      books.forEach((book) => {
-        const isLiked = currentUser.likes.find(
-          (e) => e.toString() === book._id.toString()
-        );
-        response.push({
-          book,
-          person,
-          isfollowing: true,
-          isLiked: isLiked ? true : false,
-        });
+    books.forEach((book) => {
+      const isLiked = currentUser.likes.find(
+        (e) => e.toString() === book._id.toString()
+      );
+      response.push({
+        book,
+        isfollowing: true,
+        isLiked: isLiked ? true : false,
       });
-    }
+    });
 
     return res.status(200).send(response);
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 export { followUser, postBook, likeBook, getAllFollowed };

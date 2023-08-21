@@ -1,4 +1,5 @@
 .dashboard-wrapper {
   display: grid;
   grid-template-rows: 15% 85%;
+  gap: 3rem;
 }
