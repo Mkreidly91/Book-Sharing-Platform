@@ -9,12 +9,12 @@ const DashBoardButton = ({
 }) => {
   return (
     <div
-      className={`icon-container cursor-pointer hover:outline  hover:outline-solid hover:outline-blue-700  ${className} ${
-        selected && 'outline outline-solid outline-blue-700'
+      className={`icon-container cursor-pointer  border-b-2 pb-2 border-transparent  hover:border-orange-500 ${className} ${
+        selected && 'border-orange-400'
       }`}
       onClick={onClick}
     >
-      <img className={`${iconStyles}`} src={icon} alt="" />
+      <img className={`${iconStyles} w-fit object-contain`} src={icon} alt="" />
     </div>
   );
 };
