@@ -9,6 +9,8 @@ const CustomInput = ({
   className,
   error,
   placeholder,
+  onFocus,
+  onBlur,
 }) => {
   return (
     <div className="input-container flex flex-col gap-2 font-normal">
@@ -24,6 +26,8 @@ const CustomInput = ({
         type={type}
         onChange={onChange}
         placeholder={placeholder}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
     </div>
   );
