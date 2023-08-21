@@ -1,44 +1,70 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import CustomInput from '../Inputs/CustomInput';
 import mag from '../../assets/icons/magnifier.svg';
-import genre from '../../assets/icons/genre.svg';
+import genreBlack from '../../assets/icons/genre.svg';
 import genreWhite from '../../assets/icons/genre-white.svg';
-import author from '../../assets/icons/author.svg';
+import authorBlack from '../../assets/icons/author.svg';
 import authorWhite from '../../assets/icons/author-white.svg';
+
+import { search } from '../../helpers/user.helpers';
 
 // import { search, getMessagesById } from '../../helpers/common.helpers';
 const falseState = {
   genre: false,
   author: false,
 };
-const Search = ({ setMessages, setUser, userType }) => {
+const Search = ({ togglePage, setCards }) => {
   const [query, setQuery] = useState('');
-  // const [results, setResults] = useState();
+  const [input, setInput] = useState('');
+
   const timeout = useRef();
 
+  useEffect(() => {
+    if (!input.trim()) {
+      const reset = async () => {
+        const res = await search({});
+        setCards(res);
+        togglePage('all');
+      };
+      reset();
+    }
+  }, [input]);
+
   const [clicked, setClicked] = useState(falseState);
+  const { genre, author } = clicked;
 
   const toggleState = (button) => {
     setClicked({ ...falseState, [button]: !clicked[button] });
   };
   const changeHandler = (e) => {
     const { value } = e.target;
-    setQuery(value);
+    setInput(value);
+    if (genre) {
+      setQuery({ genre: value });
+    } else if (author) {
+      setQuery({ author: value });
+    } else {
+      setQuery({ keywords: value });
+    }
   };
-
-  async function handleDebounceSearch(e) {
+  console.log(query);
+  async function handleDebounceSearch() {
     clearTimeout(timeout.current);
-    if (!query.trim()) {
-      setResults('');
-      return;
+
+    if (!input.trim()) {
+      const res = await search({});
+      setCards(res);
     }
 
     timeout.current = setTimeout(async () => {
-      // const users = await search({
-      //   userType: userType,
-      //   search: query.trim().toLowerCase(),
-      // });
-      setResults(users);
+      const posts = await search({
+        author: query.author,
+        genre: query.genre,
+        keywords: query.keywords,
+      });
+
+      console.log(posts);
+      setCards(posts);
     }, 600);
   }
 
@@ -48,12 +74,17 @@ const Search = ({ setMessages, setUser, userType }) => {
         <CustomInput
           type="search"
           className="bg-slate-100 pl-[100px] "
-          value={query}
+          value={input}
           onChange={(e) => {
             changeHandler(e);
-            // handleDebounceSearch(search);
+            handleDebounceSearch();
           }}
           placeholder="Search book titles, authors, publishers..."
+          onFocus={async () => {
+            togglePage('search');
+            const res = await search({});
+            setCards(res);
+          }}
         />
         <img
           src={mag}
@@ -62,23 +93,6 @@ const Search = ({ setMessages, setUser, userType }) => {
         />
       </div>
 
-      {/* <div className="results flex flex-col gap-5 max-h-[200px] overflow-auto">
-        {query &&
-          results &&
-          results.data.users.map((user, index) => (
-            <span
-              key={index}
-              onClick={async () => {
-                const messages = await getMessagesById(user.id);
-                setMessages(messages);
-                setUser(user.id);
-              }}
-              className=" border-b-[1px] py-2 "
-            >
-              {user.name}
-            </span>
-          ))}
-      </div> */}
       <div className="button-container flex justify-center gap-20 relative">
         <div
           className={`flex gap-3 p-1 px-3 rounded-md  cursor-pointer ${
@@ -88,7 +102,7 @@ const Search = ({ setMessages, setUser, userType }) => {
             toggleState('genre');
           }}
         >
-          <img src={clicked.genre ? genreWhite : genre} alt="" />
+          <img src={clicked.genre ? genreWhite : genreBlack} alt="" />
           <span className=""> Genre</span>
         </div>
         <div
@@ -99,7 +113,7 @@ const Search = ({ setMessages, setUser, userType }) => {
             toggleState('author');
           }}
         >
-          <img src={clicked.author ? authorWhite : author} alt="" />
+          <img src={clicked.author ? authorWhite : authorBlack} alt="" />
           <span className=""> Author</span>
         </div>
       </div>
