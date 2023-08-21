@@ -28,16 +28,16 @@ const search = async (req: AuthRequest, res: express.Response) => {
   try {
     const { genre, author, keywords } = req.query;
     const user = req.user;
-
+    console.log(keywords);
     const currentUser = await UserModel.findById(user._id);
 
     const query = {} as any;
 
     if (genre) {
-      query.genres = genre;
+      query.genres = { $regex: genre, $options: 'i' };
     }
     if (author) {
-      query.author = author;
+      query.author = { $regex: author, $options: 'i' };
     }
     if (keywords) {
       query.$or = [

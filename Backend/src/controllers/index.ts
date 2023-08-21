@@ -4,6 +4,7 @@ import {
   postBook,
   likeBook,
   getAllFollowed,
+  getAllLiked,
 } from './user.controller';
 import { search, discoverBooks } from './book.controller';
 
@@ -16,4 +17,5 @@ export {
   search,
   discoverBooks,
   getAllFollowed,
+  getAllLiked,
 };

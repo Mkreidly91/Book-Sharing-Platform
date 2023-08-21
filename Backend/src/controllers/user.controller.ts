@@ -4,7 +4,6 @@ import UserModel from '../models/User';
 import { AuthRequest } from '../middlewares/auth.middleware';
 import { Book } from '../models/Book';
 import mongoose from 'mongoose';
-import path from 'path';
 
 const followUser = async (req: AuthRequest, res: express.Response) => {
   try {
@@ -41,6 +40,7 @@ const followUser = async (req: AuthRequest, res: express.Response) => {
     return res.status(500).send({ error });
   }
 };
+
 const likeBook = async (req: AuthRequest, res: express.Response) => {
   try {
     const targetBookId = req.params.bookId;
@@ -79,26 +79,13 @@ const likeBook = async (req: AuthRequest, res: express.Response) => {
 const postBook = async (req: AuthRequest, res: express.Response) => {
   try {
     const { title, author, picture, genres, review } = req.body;
+
     if (!title || !author || !picture || !genres || !review) {
       return res.status(400).send({ error: 'All fields are required' });
     }
 
     const { user } = req;
-    // let image = ''; // Initialize an empty picture URL
 
-    // if (req.files && req.files[0]) {
-    //   const pictureFile = req.files[0];
-    //   const picturePath = path.join(
-    //     __dirname,
-    //     '..',
-    //     'uploads',
-    //     pictureFile.name
-    //   );
-
-    //   await pictureFile.mv(picturePath);
-
-    //   image = `/uploads/${pictureFile.name}`;
-    // }
     const newBook = new Book({
       title,
       author,
@@ -112,16 +99,22 @@ const postBook = async (req: AuthRequest, res: express.Response) => {
 
     const updatedUser = await UserModel.findByIdAndUpdate(
       user._id,
-      { $push: { books: newBook._id } }, // Use $push to add the new book's _id to the array
-      { new: true } // Return the updated document
+      { $push: { books: newBook._id } },
+      { new: true }
     );
     if (!updatedUser) {
       return res.status(400);
     }
+    const book = await Book.findById(newBook._id).populate(
+      'createdBy',
+      'name email'
+    );
+    console.log(newBook, book);
+
     return res.status(201).send({
-      message: 'Book created successfully',
-      book: newBook,
-      user: updatedUser,
+      book: book,
+      isFollowing: false,
+      isLiked: false,
     });
   } catch (error) {
     console.log(error);
@@ -145,16 +138,53 @@ const getAllFollowed = async (req: AuthRequest, res: express.Response) => {
       const isLiked = currentUser.likes.find(
         (e) => e.toString() === book._id.toString()
       );
+      const isFollowing = currentUser.following.find(
+        (e) => e.toString() === book.createdBy._id.toString()
+      );
       response.push({
         book,
-        isFollowing: true,
+        isFollowing: isFollowing ? true : false,
         isLiked: isLiked ? true : false,
       });
     });
-
+    console.log(response);
     return res.status(200).send(response);
   } catch (error) {
     console.log(error);
   }
 };
-export { followUser, postBook, likeBook, getAllFollowed };
+
+const getAllLiked = async (req: AuthRequest, res: express.Response) => {
+  try {
+    const user = req.user;
+    const currentUser = await UserModel.findById(user._id);
+    const response: any = [];
+
+    const { likes } = currentUser;
+
+    const books = await Book.find({ _id: { $in: likes } }).populate(
+      'createdBy',
+      'name email'
+    );
+
+    books.forEach((book) => {
+      const isLiked = currentUser.likes.find(
+        (e) => e.toString() === book._id.toString()
+      );
+      const isFollowing = currentUser.following.find(
+        (e) => e.toString() === book.createdBy._id.toString()
+      );
+      response.push({
+        book,
+        isFollowing: isFollowing ? true : false,
+        isLiked: isLiked ? true : false,
+      });
+    });
+    console.log(response);
+    return res.status(200).send(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { followUser, postBook, likeBook, getAllFollowed, getAllLiked };
